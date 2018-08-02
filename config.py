@@ -12,7 +12,11 @@ config = configparser.ConfigParser()
 config.read(FILE)
 config.sections()
 
-API_KEY = config['CONFIG']['API_KEY']
-NUMBER = config['CONFIG']['NUMBER']
-SENDER = config['CONFIG']['SENDER']
-TEAM = config['CONFIG']['TEAM']
+DB_HOST = config['CONFIG']['DB_HOST']
+DB_PORT = config['CONFIG']['DB_PORT']
+DB_NAME = config['CONFIG']['DB_NAME']
+DB_USERNAME = config['CONFIG']['DB_USERNAME']
+DB_PASSWORD = config['CONFIG']['DB_PASSWORD']
+
+
+
