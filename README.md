@@ -1,18 +1,20 @@
 # 拼多多爬虫
 
-## To-do-list:
+
+## description:
+
+爬取拼多多某个一级分类下的商品信息:
+
+![](https://ws2.sinaimg.cn/large/006tKfTcgy1ftxuhpq3zoj315o0e07nz.jpg)
 
 
-* [x] 爬取分类信息(一级-二级)
-* [x] MongoDB入库
-    * [x] 入分类信息
-* [x] 爬取某一级分类下的所有商品信息
-    * [x] 入库-入商品信息
-    * [x] 入库-入offset_num信息
+- 多代理
+
+
 
 ---
 
-##Usage:
+## Usage:
 
 ![](https://ws2.sinaimg.cn/large/006tKfTcgy1ftxu5yfvbpj30zm0k61fj.jpg)
 
@@ -26,11 +28,18 @@ start to crawl all goods info with this opt_id
 
 ---
 
-## description:
+## To-do-list:
 
-- 多代理
+
+* [x] 爬取分类信息(一级-二级)
+* [x] MongoDB入库
+    * [x] 入分类信息
+* [x] 爬取某一级分类下的所有商品信息
+    * [x] 入库-入商品信息
+    * [x] 入库-入offset_num信息
 
 ---
+
 
 
 ## log:
