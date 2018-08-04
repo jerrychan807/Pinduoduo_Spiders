@@ -18,15 +18,25 @@ sys.setdefaultencoding('utf-8')
 # 电脑的opt_id为2478
 
 from mongo_db import insertComputersGoods
+from proxy import get_proxy_queue
 
 import Queue
 
 
+start_offset_num = 0
+end_offset_num = 1000
 
 class ComputersGoodsSpider():
     def __init__(self):
-        self.second_category_url = "http://apiv3.yangkeduo.com/operation/2478/groups?opt_type=1&size=100&offset={0}&flip=&pdduid=0"
+        self.second_category_url = "http://apiv2.yangkeduo.com/operation/2478/groups?opt_type=1&size=100&offset={0}&flip=&pdduid=0"
+        #"http://apiv3.yangkeduo.com/operation/2478/groups?opt_type=1&size=100&offset={0}&flip=&pdduid=0"
         self.offset_num_queue = Queue.Queue()
+        self.proxy_ip_queue = Queue.Queue() # 代理ip队列
+
+
+    def get_proxy_ip_queue(self):
+        self.proxy_ip_queue = get_proxy_queue()
+
 
     # 随机更改user_agent
     def change_useragent(self):
@@ -42,48 +52,68 @@ class ComputersGoodsSpider():
             'user-agent': user_agent,
         }
 
-    def get_html(self,offset_num):
-        self.change_useragent()
+    def get_html(self,offset_num, proxy_ip):
+        # self.change_useragent()
+        proxies = {
+            "http": "http://{0}".format(proxy_ip)
+        }
         url = self.second_category_url.format(offset_num)
         print "[*] requesting url : {0}".format(url)
-        response = requests.get(url, headers=self.headers)
-        if response.status_code == 200:
-            html_data = response.content
-            return html_data
-        else: # 尝试过几秒重连
-            pass
+        try:
+            response = requests.get(url, headers=self.headers,proxies=proxies,timeout=5)
+        except requests.exceptions.ConnectTimeout,e:
+            print e
+        except requests.exceptions.ReadTimeout,e:
+            print e
+        except requests.exceptions.ProxyError,e:
+            print e
+        except requests.exceptions.ConnectionError,e:
+            print e
+        else:
+            if response.status_code == 200:
+                html_data = response.content
+                return html_data
+            else: # 尝试过几秒重连
+                pass
         return None
 
     def create_offset_num_queue(self):
-        for offset_num in range(0, 10000):
+        global start_offset_num, end_offset_num
+
+        for offset_num in range(start_offset_num, end_offset_num):
             self.offset_num_queue.put(offset_num)
 
     def random_sleep(self):
         for i in range(1, 11):
-            time.sleep(0.3)
+            time.sleep(0.5)
             # print '请求失败，第%s次重复请求' % i
             if i == 5:
-                print "[*] sleeping 1s..."
-                time.sleep(1)
+                print "[*] sleeping 3s..."
+                time.sleep(3)
             elif i == 7:
+                print "[*] sleeping 5s..."
+                time.sleep(5)
+            elif i == 9:
                 print "[*] sleeping 2s..."
                 time.sleep(2)
-            elif i == 9:
-                print "[*] sleeping 3s..."
             else:
-                time.sleep(1)
-                print "[*] sleeping 1s..."
+                time.sleep(3)
+                print "[*] sleeping 3s..."
             break
 
 
     def get_goods_data(self):
         while not self.offset_num_queue.empty():
-            self.random_sleep()
+            #self.random_sleep()
             self.change_useragent()
+            if self.proxy_ip_queue.empty():
+                self.get_proxy_ip_queue()
+            proxy_ip = self.proxy_ip_queue.get()
+
 
             offset_num =  self.offset_num_queue.get()
             print "[*] using offset_num : {0}".format(offset_num)
-            html_data = self.get_html(offset_num) # 获取json数据
+            html_data = self.get_html(offset_num,proxy_ip) # 获取json数据
             if html_data:
                 jsonobj = json.loads(html_data.decode('utf-8'))
 
@@ -91,6 +121,8 @@ class ComputersGoodsSpider():
                     good_dict = {}
                     good_dict['_id'] = each_good['goods_id']  # 商品id
                     good_dict['goods_name'] = each_good['goods_name']  # 商品名称
+                    good_dict['normal_price'] = each_good['normal_price']
+                    good_dict['market_price'] = each_good['market_price']
                     good_dict['price'] = each_good['group']['price'] # 商品价格
                     good_dict['cnt'] = each_good['cnt']  # 已拼件数
 
