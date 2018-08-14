@@ -3,11 +3,23 @@
 
 ## description:
 
-爬取拼多多某个一级分类下的商品信息:
+version1:
 
-![](https://ws2.sinaimg.cn/large/006tKfTcgy1ftxuhpq3zoj315o0e07nz.jpg)
+- base on `requests`
+- 爬取拼多多某一级分类下的所有商品信息
+
+version2:
+
+- base on framework `scrapy`
+- 爬取拼多多所有的商品信息:
 
 
+
+---
+
+##Requirements
+
+- python2
 - 多代理
 
 
@@ -16,15 +28,21 @@
 
 ## Usage:
 
-![](https://ws2.sinaimg.cn/large/006tKfTcgy1ftxu5yfvbpj30zm0k61fj.jpg)
+1. 在`proxy.py`里填入自己的代理ip的api地址
+2. 在`mongo_db.py`配置一下本地MongoDB数据库的信息
 
-opt_id : 一级分类商品的id
+### Version1 usage:
 
-```
-python firstcat_spider.py {opt_id}
-```
+3. `python firstcat_spider.py {opt_id}`
 
-start to crawl all goods info with this opt_id
+ - ![](https://ws2.sinaimg.cn/large/006tKfTcgy1ftxu5yfvbpj30zm0k61fj.jpg)
+ - opt_id : 一级分类商品的id
+
+4. start to crawl all goods info with this opt_id
+
+### Version2 usage:
+
+
 
 ---
 
@@ -37,18 +55,29 @@ start to crawl all goods info with this opt_id
 * [x] 爬取某一级分类下的所有商品信息
     * [x] 入库-入商品信息
     * [x] 入库-入offset_num信息
+* [x] 修改成scrapy逛街
+* [x] 优化代码
+
 
 ---
 
 
 
+---
+
+
+## screenshots
+
+![](https://ws2.sinaimg.cn/large/006tKfTcgy1ftxuhpq3zoj315o0e07nz.jpg)
+
+---
+
 ## log:
 
-
 - 2018.8.4 18:16:
- - offsetnum：1944
- - goods num:4312
-
+ - goods num : 4312
+- 2018.8.10 18:16:
+ - goods num : 20414
 
 ---
 

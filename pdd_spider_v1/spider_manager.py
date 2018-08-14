@@ -4,9 +4,10 @@
 # @Author  : jerry
 
 from multiprocessing import Pool
+
+import mongo_db
 # import subprocess
 from firstcat_spider import FirstCategoryGoodsSpider
-import mongo_db
 
 
 def start_first_cat_spider(opt_id):
@@ -34,6 +35,11 @@ class SpiderManager():
 '''
 
 
+
+        # opt_id = self.opt_id_list[0]
+        # #for opt_id in self.opt_id_list[0]:
+        # subprocess.Popen(
+        # ["python", "/Users/chanjerry/Desktop/oksec/9.development/pdd_spider/firstcat_spider.py", str(opt_id)])
 
 
 

@@ -6,16 +6,16 @@
 # optId-collections-map
 
 
-import random,sys,time
 import Queue
-import json,jsonpath
-import requests
+import json
 import linecache
+import random
+import sys
+
+import requests
+
 import mongo_db
-
 from proxy import get_proxy_queue
-
-
 
 start_offset_num = 0
 end_offset_num = 1000
