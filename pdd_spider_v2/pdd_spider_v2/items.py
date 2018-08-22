@@ -10,7 +10,7 @@ import scrapy
 
 class PddSpiderGoodsItem(scrapy.Item):
     _id = scrapy.Field() # 商品id
-    optID = scrapy.Field()  # 商品一级分类Id
+    opt_id = scrapy.Field()  # 商品一级分类Id
     goods_name = scrapy.Field()  # 商品名称
     normal_price = scrapy.Field()
     market_price = scrapy.Field()
@@ -20,5 +20,13 @@ class PddSpiderGoodsItem(scrapy.Item):
 
 
 class PddSpiderOffsetItem(scrapy.Item):
-    optID = scrapy.Field()
+    opt_id = scrapy.Field()
     offset_num = scrapy.Field()
+
+
+'''二级分类信息'''
+class PddSpiderSecCategoryItem(scrapy.Item):
+    _id = scrapy.Field()
+    opt_name = scrapy.Field()
+    father_opt_id = scrapy.Field()
+    cats = scrapy.Field()

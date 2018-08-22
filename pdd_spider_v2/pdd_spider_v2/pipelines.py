@@ -8,7 +8,7 @@ import sys
 from os import path
 sys.path.append(path.dirname(path.dirname(path.dirname(path.abspath(__file__)))))
 
-from pdd_spider_v2.items import PddSpiderGoodsItem,PddSpiderOffsetItem
+from pdd_spider_v2.items import PddSpiderGoodsItem,PddSpiderOffsetItem,PddSpiderSecCategoryItem
 from pdd_spider_v2 import mongo_db
 
 class PddSpiderV2Pipeline(object):
@@ -19,8 +19,10 @@ class PddSpiderV2Pipeline(object):
             #self.client.insert(dict(item))
 
         if isinstance(item,PddSpiderOffsetItem):
-            print '--------------'
             mongo_db.insert_offset_num_dict(dict(item))
-            print '--------------'
 
+        if isinstance(item,PddSpiderSecCategoryItem):
+            print '--------------'
+            mongo_db.insertCategory(dict(item))
+            print '--------------'
         return item

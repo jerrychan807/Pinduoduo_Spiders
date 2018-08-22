@@ -4,7 +4,7 @@
 #
 # See documentation in:
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
-import datetime
+import datetime,time
 from scrapy import signals
 import random
 import linecache
@@ -130,10 +130,16 @@ class ProxyMiddleWare(object):
             print("[**] this proxy ip is useful:" + self.proxy)
             print "[**] now , proxy_ip length is : {0}".format(self.proxy_ip_queue.qsize())
             return response
-        else: # 如果返回的response状态不是200，重新生成当前request对象
-            self.proxy_ip_using_num -= 10 # 该代理ip不可用,从代理ip池中去掉
-            self.process_request(request, spider)
+        elif response.status == 429 or 403:
+            ## httpcode 429 Too Many Requests
+            ## httpcode 403 Forbidden
+            time.sleep(3)
             return request
+        else:
+            time.sleep(2)
+            return request
+
+
 
     def process_exception(self, request, exception, spider):
         import time
@@ -146,7 +152,7 @@ class ProxyMiddleWare(object):
     def _faillog(self, request, errorType, reason, spider):
         with codecs.open('faillog.log', 'a', encoding='utf-8') as file:
             file.write("%(now)s [%(error)s] %(url)s reason: %(reason)s \r\n" %
-                       {'now': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                       {'now': time.strftime("%Y%m%d %H%M%S", time.localtime()),
                         'error': errorType,
                         'url': request.url,
                         'reason': reason})
