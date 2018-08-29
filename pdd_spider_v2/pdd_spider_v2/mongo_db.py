@@ -28,7 +28,6 @@ def insertCategory(info_dict):
     return True
 
 
-
 def insert_goods_dict(goods_dict):
     client = MongoClient(db_host, db_port)
     db = client[db_name]
@@ -39,6 +38,7 @@ def insert_goods_dict(goods_dict):
         print(e)
         pass
     return True
+
 
 def get_optid_list():
     client = MongoClient(db_host, db_port)
@@ -90,14 +90,15 @@ def get_new_opt_id():
     return None
 
 
-def get_category_infos(opt_id):
+def get_category_infos(father_opt_id):
     client = MongoClient(db_host, db_port)
     db = client[db_name]
-    COLLECTION = "category"
+    COLLECTION = "second_category"
     db_coll = db[COLLECTION]
-    query_dict = {"optID":opt_id}
-    result = db_coll.find_one(query_dict)
+    query_dict = {"father_opt_id" : father_opt_id}
+    result = db_coll.find(query_dict)
     return result
+
 
 
 if __name__ == '__main__':
@@ -106,8 +107,9 @@ if __name__ == '__main__':
     # coll = db.category
     # rs = coll.insert_one({'a': 1, 'b': 2})
     # print(rs)
-    opt_id = 14
-    result = get_category_infos(opt_id)
-
-    for second_cats in result['cat']:
-        print second_cats
+    # opt_id = 14
+    # result = get_category_infos(opt_id)
+    #
+    # for each in result:
+    #     print each
+    print check_offset_num_exists( {"third_opt_id": 1326, "offset_num": 1})

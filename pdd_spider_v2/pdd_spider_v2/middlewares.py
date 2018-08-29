@@ -133,7 +133,7 @@ class ProxyMiddleWare(object):
         elif response.status == 429 or 403:
             ## httpcode 429 Too Many Requests
             ## httpcode 403 Forbidden
-            time.sleep(3)
+            time.sleep(2)
             return request
         else:
             time.sleep(2)
@@ -145,7 +145,7 @@ class ProxyMiddleWare(object):
         import time
         time.sleep(2)
         self._faillog(request, u'EXCEPTION', exception, spider)
-        self.proxy_ip_using_num -= 10  # 该代理ip不可用,从代理ip池中去掉
+        self.proxy_ip_using_num -= 50  # 该代理ip不可用,从代理ip池中去掉
         self.process_request(request, spider)
         return request
 
@@ -161,11 +161,12 @@ class ProxyMiddleWare(object):
     def set_proxy_ip_queue(self):
         print "[+] try to reset proxy ip queue"
         if self.proxy_ip_queue.empty(): # 代理ip池消耗完
+            time.sleep(1)
             self.get_proxy_ip_queue()
-            self.proxy_ip_using_num = self.proxy_ip_queue.qsize() * 10 # 若每个代理ip可用，则用10次
+            self.proxy_ip_using_num = self.proxy_ip_queue.qsize() * 50 # 若每个代理ip可用，则用10次
         if self.proxy_ip_using_num < 1: # 代理ip总初始次数用完
             self.get_proxy_ip_queue()
-            self.proxy_ip_using_num = self.proxy_ip_queue.qsize() * 10
+            self.proxy_ip_using_num = self.proxy_ip_queue.qsize() * 50
 
 
     def get_proxy_ip_queue(self):
