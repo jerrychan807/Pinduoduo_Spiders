@@ -13,30 +13,32 @@ class GoodsSpider(scrapy.Spider):
     name = 'goods'
     allowed_domains = ['yangkeduo.com']
 
-    def set_crawl_url(self, opt_id, opt_type):
+    def set_crawl_url(self, opt_id, opt_type, offset_num):
         # api_num:2,3,4
         api_num = random.randint(2, 4)
-        url = "http://apiv{api_num}.yangkeduo.com/operation/{opt_id}/groups?opt_type={opt_type}&size=100&offset=2&flip=&pdduid=0".format(
-            opt_id = opt_id, api_num = api_num, opt_type = opt_type)
+        url = "http://apiv{api_num}.yangkeduo.com/operation/{opt_id}/groups?opt_type={opt_type}&size=100&offset={offset_num}&flip=&pdduid=0".format(
+            opt_id = opt_id, api_num = api_num, opt_type = opt_type, offset_num=offset_num)
         return url
 
 
     def create_crawl_url_list(self, first_opt_id):
         category_infos_dict_list = mongo_db.get_category_infos(first_opt_id)
 
-        third_category_dict_list = [{"first_opt_id": first_opt_id, "second_opt_id": int(category_infos_dict['_id']),"third_opt_id": int(each['opt_id']), "opt_type":3, "offset_num":offset_num} for category_infos_dict in category_infos_dict_list for each in category_infos_dict['cats'] for offset_num in range(1, 1000, 100)]
+        third_category_dict_list = [{"first_opt_id": first_opt_id, "second_opt_id": int(category_infos_dict['_id']),"third_opt_id": int(each['opt_id']), "opt_type":3, "offset_num":offset_num} for category_infos_dict in category_infos_dict_list
+                                    for each in category_infos_dict['cats']
+                                        for offset_num in range(1, 1000, 100)]
         return third_category_dict_list
 
 
 
     def start_requests(self):
-        # first_opt_id_list = [14, 1281, 4, 15, 1, 1282, 743, 18, 13, 1917, 818, 1543, 16, 1451, 2048, 2478]
-        first_opt_id_list = [1281]
-        for first_opt_id in first_opt_id_list:
+        first_opt_id_list = [14, 1281, 4, 15, 1, 1282, 743, 18, 13, 1917, 818, 1543, 16, 1451, 2048, 2478]
+        # first_opt_id_list = [1281]
+        for first_opt_id in first_opt_id_list: # [::-1]列表反转
             third_category_dict_list = self.create_crawl_url_list(first_opt_id)
             for third_category_dict in third_category_dict_list:
                 if not mongo_db.check_offset_num_exists({"third_opt_id": third_category_dict['third_opt_id'], "offset_num": third_category_dict['offset_num']}): # 没爬过该页面
-                    url = self.set_crawl_url(third_category_dict['third_opt_id'], third_category_dict['opt_type'])
+                    url = self.set_crawl_url(third_category_dict['third_opt_id'], third_category_dict['opt_type'], third_category_dict['offset_num'])
                     yield scrapy.Request(url=url, callback=self.parse, dont_filter=True,
                                          meta={"first_opt_id": third_category_dict['first_opt_id'], "second_opt_id": third_category_dict['second_opt_id'], "third_opt_id": third_category_dict['third_opt_id'], "offset_num": third_category_dict['offset_num']})
                 else:
