@@ -1,17 +1,22 @@
 # 拼多多爬虫
 
 
+## screenshots
+
+- 已爬取的商品信息条数(70w+):
+ - ![](https://ws4.sinaimg.cn/large/0069RVTdgy1fusovmf76qj30hy03a75h.jpg) 
+
+- 商品信息示例:
+ - ![](https://ws2.sinaimg.cn/large/006tKfTcgy1ftxuhpq3zoj315o0e07nz.jpg)
+
+---
+
 ## description:
-
-version1:
-
-- base on `requests`
-- 爬取拼多多某一级分类下的所有商品信息
 
 version2:
 
 - base on framework `scrapy`
-- 爬取拼多多所有的商品信息:
+- 爬取拼多多所有的商品信息
 
 
 
@@ -21,7 +26,7 @@ version2:
 
 - python2
 - 多代理
-
+-  `scrapy`
 
 
 ---
@@ -30,18 +35,13 @@ version2:
 
 1. 在`proxy.py`里填入自己的代理ip的api地址
 2. 在`mongo_db.py`配置一下本地MongoDB数据库的信息
-
-### Version1 usage:
-
-3. `python firstcat_spider.py {opt_id}`
-
- - ![](https://ws2.sinaimg.cn/large/006tKfTcgy1ftxu5yfvbpj30zm0k61fj.jpg)
- - opt_id : 一级分类商品的id
-
-4. start to crawl all goods info with this opt_id
+3. 根据自己的代理、网络带宽、主机性能等情况修改`settings.py`中的并发请求数`CONCURRENT_REQUESTS`
 
 ### Version2 usage:
 
+1. 进入到 `pdd_spider_v2`目录下
+2. 先爬取所有二级、三级分类信息 `scrapy crawl category_infos`
+3. 爬取所有商品分类信息 `scrapy crawl goods`
 
 
 ---
@@ -55,20 +55,12 @@ version2:
 * [x] 爬取某一级分类下的所有商品信息
     * [x] 入库-入商品信息
     * [x] 入库-入offset_num信息
-* [x] 修改成scrapy逛街
-* [x] 优化代码
-
-
----
+* [x] 修改成scrapy框架
+    * [x] 优化代码
+    * [x] 减少页面的爬取
 
 
 
----
-
-
-## screenshots
-
-![](https://ws2.sinaimg.cn/large/006tKfTcgy1ftxuhpq3zoj315o0e07nz.jpg)
 
 ---
 
@@ -78,6 +70,8 @@ version2:
  - goods num : 4312
 - 2018.8.10 18:16:
  - goods num : 20414
+- 2018.8.31 18:16:
+ - goods num : 70w+
 
 ---
 

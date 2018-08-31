@@ -1,0 +1,6 @@
+20180830 234841 [EXCEPTION] http://apiv3.yangkeduo.com/operation/1697/groups?opt_type=3&size=100&offset=1&flip=&pdduid=0 reason: 'NoneType' object has no attribute 'qsize' 
+20180830 234843 [EXCEPTION] http://apiv4.yangkeduo.com/operation/1697/groups?opt_type=3&size=100&offset=101&flip=&pdduid=0 reason: 'NoneType' object has no attribute 'empty' 
+20180830 234845 [EXCEPTION] http://apiv2.yangkeduo.com/operation/1697/groups?opt_type=3&size=100&offset=201&flip=&pdduid=0 reason: 'NoneType' object has no attribute 'empty' 
+20180830 234847 [EXCEPTION] http://apiv3.yangkeduo.com/operation/1697/groups?opt_type=3&size=100&offset=301&flip=&pdduid=0 reason: 'NoneType' object has no attribute 'empty' 
+20180830 234849 [EXCEPTION] http://apiv4.yangkeduo.com/operation/1697/groups?opt_type=3&size=100&offset=401&flip=&pdduid=0 reason: 'NoneType' object has no attribute 'empty' 
+20180830 234850 [EXCEPTION] http://apiv4.yangkeduo.com/operation/1697/groups?opt_type=3&size=100&offset=501&flip=&pdduid=0 reason: 'NoneType' object has no attribute 'empty' 
